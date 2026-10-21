@@ -5,6 +5,7 @@ export interface IUrl extends Document {
     shortCode: string;
     alias?: string;
     clicks: number;
+    userId?: mongoose.Types.ObjectId;
     createdAt: Date;
 }
 
@@ -27,6 +28,12 @@ const UrlSchema: Schema = new Schema(
         clicks: {
             type: Number,
             default: 0,
+        },
+        userId: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+            index: true,
+            default: null,
         },
     },
     { timestamps: true }

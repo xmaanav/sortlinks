@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Url from "@/models/Url";
 import { nanoid } from "nanoid";
+import { authenticateRequestUser } from "@/lib/session";
 
 function isValidUrl(url: string): boolean {
     try {
-        new URL(url);
-        return true;
+        const parsed = new URL(url);
+        return parsed.protocol === "http:" || parsed.protocol === "https:";
     } catch {
         return false;
     }
@@ -23,7 +24,7 @@ export async function POST(request: NextRequest) {
 
         if (!originalUrl || !isValidUrl(originalUrl)) {
             return NextResponse.json(
-                { error: "A valid URL is required." },
+                { error: "A valid HTTP or HTTPS destination URL is required." },
                 { status: 400 }
             );
         }
@@ -32,11 +33,13 @@ export async function POST(request: NextRequest) {
             return NextResponse.json(
                 {
                     error:
-                        "Alias must be 2-50 characters and can only contain letters, numbers, hyphens, and underscores.",
+                        "Alias must be 2-50 characters containing only letters, numbers, hyphens, and underscores.",
                 },
                 { status: 400 }
             );
         }
+
+        const user = await authenticateRequestUser(request);
 
         await connectDB();
 
@@ -44,7 +47,7 @@ export async function POST(request: NextRequest) {
             const existing = await Url.findOne({ alias });
             if (existing) {
                 return NextResponse.json(
-                    { error: "That alias is already taken. Please choose another." },
+                    { error: "That custom alias is already reserved. Please choose another." },
                     { status: 409 }
                 );
             }
@@ -56,10 +59,11 @@ export async function POST(request: NextRequest) {
             originalUrl,
             shortCode,
             alias: alias || undefined,
+            userId: user ? user._id : null,
         });
 
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-        const shortUrl = `${baseUrl}/${alias || shortCode}`;
+        const origin = request.nextUrl.origin || process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+        const shortUrl = `${origin}/${alias || shortCode}`;
 
         return NextResponse.json(
             {
@@ -75,7 +79,7 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         console.error("Shorten error:", error);
         return NextResponse.json(
-            { error: "Internal server error. Please try again." },
+            { error: "An unexpected error occurred while shortening the link." },
             { status: 500 }
         );
     }

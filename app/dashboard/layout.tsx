@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Dashboard — ShortX Admin",
+    title: "Dashboard — SortLinks Admin",
     description: "Admin dashboard to manage, track and delete shortened links.",
 };
 

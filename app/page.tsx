@@ -1,148 +1,145 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
-
-export const metadata: Metadata = {
-  title: "ShortX — Free URL Shortener",
-  description: "Create short, shareable links instantly. No signup needed.",
-};
-
-const features = [
-  { icon: "⚡", title: "Instant Creation", desc: "Shorten any URL in seconds with no setup required." },
-  { icon: "🎯", title: "Custom Aliases", desc: "Use your own alias to create branded, memorable links." },
-  { icon: "📊", title: "Click Tracking", desc: "See how many times each link has been visited." },
-  { icon: "🔒", title: "Admin Panel", desc: "Manage all your links from a secure admin dashboard." },
-  { icon: "📋", title: "One-Click Copy", desc: "Copy your short link to clipboard instantly." },
-  { icon: "♾️", title: "Never Expire", desc: "Your links stay active forever, no time limits." },
-];
+import {
+    FiLink,
+    FiBarChart2,
+    FiKey,
+    FiCopy,
+    FiArrowRight,
+    FiCheck,
+} from "react-icons/fi";
+import { useAuth } from "@/components/AuthProvider";
 
 export default function HomePage() {
-  return (
-    <div className="min-h-screen bg-white dark:bg-gray-950">
+    const { user } = useAuth();
+    const [host, setHost] = useState("localhost:3000");
 
-      {/* Hero */}
-      <section className="py-20 px-4 text-center">
-        <div className="max-w-2xl mx-auto">
-          <span className="inline-block text-xs font-semibold uppercase tracking-widest text-violet-600 dark:text-violet-400 mb-4">
-            Free · No Signup · Instant
-          </span>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
-            Shorten links.<br className="hidden sm:block" /> Share everywhere.
-          </h1>
-          <p className="text-gray-500 dark:text-gray-400 text-lg mb-8 leading-relaxed">
-            Turn long, messy URLs into clean short links. Add a custom alias or let us generate one automatically.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link
-              href="/shorten"
-              className="bg-violet-600 hover:bg-violet-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors text-sm"
-            >
-              Shorten a URL
-            </Link>
-            <Link
-              href="/admin"
-              className="bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold px-6 py-3 rounded-lg transition-colors text-sm"
-            >
-              Admin Dashboard
-            </Link>
-          </div>
-        </div>
-      </section>
+    useEffect(() => {
+        if (typeof window !== "undefined" && window.location.host) {
+            setHost(window.location.host);
+        }
+    }, []);
 
-      {/* Demo bar */}
-      <section className="px-4 pb-16">
-        <div className="max-w-2xl mx-auto bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <div className="flex-1 min-w-0">
-            <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">Long URL</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 font-mono truncate">
-              https://example.com/very/long/url?utm_source=social&utm_campaign=launch
-            </p>
-          </div>
-          <span className="text-gray-300 dark:text-gray-700 hidden sm:block">→</span>
-          <div className="flex-shrink-0">
-            <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">Short link</p>
-            <p className="text-sm font-semibold font-mono text-violet-600 dark:text-violet-400">shortx.io/my-link</p>
-          </div>
-        </div>
-      </section>
+    return (
+        <div className="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+            <section className="pt-20 pb-16 px-4 sm:px-6">
+                <div className="max-w-3xl mx-auto text-center">
+                    <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-4">
+                        Simple, fast URL shortening
+                    </h1>
+                    <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-xl mx-auto mb-8">
+                        Create short links, track total visits, and manage links programmatically with developer API keys.
+                    </p>
 
-      {/* Features */}
-      <section className="px-4 py-16 bg-gray-50 dark:bg-gray-900">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 dark:text-white mb-2">
-            Everything you need
-          </h2>
-          <p className="text-center text-gray-500 dark:text-gray-400 mb-10 text-sm">
-            Simple features, no clutter.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {features.map((f) => (
-              <div
-                key={f.title}
-                className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl p-5 hover:border-violet-300 dark:hover:border-violet-700 transition-colors"
-              >
-                <span className="text-2xl mb-3 block">{f.icon}</span>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-1 text-sm">{f.title}</h3>
-                <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12">
+                        <Link
+                            href="/shorten"
+                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-gray-900 hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-100 text-white dark:text-gray-900 font-medium text-sm transition"
+                        >
+                            <span>Shorten a URL</span>
+                            <FiArrowRight className="w-4 h-4" />
+                        </Link>
+                        {user ? (
+                            <Link
+                                href="/dashboard"
+                                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-gray-300 dark:border-gray-800 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-900 dark:text-gray-100 font-medium text-sm transition"
+                            >
+                                <span>Go to Dashboard</span>
+                            </Link>
+                        ) : (
+                            <Link
+                                href="/signup"
+                                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-gray-300 dark:border-gray-800 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-900 dark:text-gray-100 font-medium text-sm transition"
+                            >
+                                <span>Create Account</span>
+                            </Link>
+                        )}
+                    </div>
 
-      {/* How it works */}
-      <section className="px-4 py-16">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 dark:text-white mb-2">
-            How it works
-          </h2>
-          <p className="text-center text-gray-500 dark:text-gray-400 mb-10 text-sm">Three steps. Done.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-            {[
-              { n: "1", t: "Paste your URL", d: "Enter any long URL into the shortener input." },
-              { n: "2", t: "Customize (optional)", d: "Add a custom alias or let us auto-generate a code." },
-              { n: "3", t: "Share your link", d: "Copy and share anywhere. Track clicks in the dashboard." },
-            ].map((s) => (
-              <div key={s.n} className="text-center">
-                <div className="w-10 h-10 rounded-full bg-violet-600 text-white font-bold text-sm flex items-center justify-center mx-auto mb-3">
-                  {s.n}
+                    <div className="max-w-xl mx-auto p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-left">
+                        <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Example</div>
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-sm">
+                            <span className="font-mono text-gray-500 dark:text-gray-400 truncate max-w-xs">
+                                https://github.com/developer/portfolio
+                            </span>
+                            <span className="font-mono font-semibold text-gray-900 dark:text-white">
+                                {host}/portfolio
+                            </span>
+                        </div>
+                    </div>
                 </div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-1 text-sm">{s.t}</h3>
-                <p className="text-gray-500 dark:text-gray-400 text-sm">{s.d}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+            </section>
 
-      {/* CTA */}
-      <section className="px-4 py-16 bg-gray-50 dark:bg-gray-900">
-        <div className="max-w-xl mx-auto text-center bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-10">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-            Ready to shorten your first link?
-          </h2>
-          <p className="text-gray-500 dark:text-gray-400 mb-6 text-sm">Free, no account needed.</p>
-          <Link
-            href="/shorten"
-            className="bg-violet-600 hover:bg-violet-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors text-sm inline-block"
-          >
-            Get Started — It&apos;s Free
-          </Link>
-        </div>
-      </section>
+            <section className="py-16 border-t border-gray-200 dark:border-gray-800">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="p-5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+                            <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-3">
+                                <FiLink className="w-4 h-4 text-gray-700 dark:text-gray-300" />
+                            </div>
+                            <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
+                                Custom Aliases
+                            </h2>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                                Pick memorable custom slugs for links or let the system generate short codes.
+                            </p>
+                        </div>
 
-      {/* Footer */}
-      <footer className="border-t border-gray-200 dark:border-gray-800 px-4 py-6">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <span className="font-bold text-gray-900 dark:text-white text-sm">ShortX</span>
-          <p className="text-gray-400 dark:text-gray-500 text-xs">
-            © {new Date().getFullYear()} ShortX. Fast, free URL shortening.
-          </p>
-          <div className="flex gap-4">
-            <Link href="/shorten" className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-xs transition-colors">Shorten</Link>
-            <Link href="/admin" className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-xs transition-colors">Admin</Link>
-          </div>
+                        <div className="p-5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+                            <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-3">
+                                <FiBarChart2 className="w-4 h-4 text-gray-700 dark:text-gray-300" />
+                            </div>
+                            <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
+                                Visit Analytics
+                            </h2>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                                Inspect click statistics and visitor counts for each link you create.
+                            </p>
+                        </div>
+
+                        <div className="p-5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+                            <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-3">
+                                <FiKey className="w-4 h-4 text-gray-700 dark:text-gray-300" />
+                            </div>
+                            <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
+                                Developer API
+                            </h2>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                                Authenticate requests using your personal API key via Bearer tokens.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer className="border-t border-gray-200 dark:border-gray-800 py-8 px-4 sm:px-6">
+                <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500 dark:text-gray-400">
+                    <div>
+                        Credit at footer: <strong className="font-semibold text-gray-800 dark:text-gray-200">MrAbhi2k3</strong>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <Link href="/shorten" className="hover:text-gray-900 dark:hover:text-white transition">
+                            Shorten
+                        </Link>
+                        {user ? (
+                            <Link href="/dashboard" className="hover:text-gray-900 dark:hover:text-white transition">
+                                Dashboard
+                            </Link>
+                        ) : (
+                            <>
+                                <Link href="/login" className="hover:text-gray-900 dark:hover:text-white transition">
+                                    Login
+                                </Link>
+                                <Link href="/signup" className="hover:text-gray-900 dark:hover:text-white transition">
+                                    Signup
+                                </Link>
+                            </>
+                        )}
+                    </div>
+                </div>
+            </footer>
         </div>
-      </footer>
-    </div>
-  );
+    );
 }

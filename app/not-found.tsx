@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { FiHome, FiPlus, FiAlertTriangle } from "react-icons/fi";
 
 export const metadata: Metadata = {
     title: "404 — Link Not Found",
@@ -7,26 +8,34 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
     return (
-        <div className="min-h-screen bg-white dark:bg-gray-950 flex items-center justify-center px-4">
-            <div className="text-center max-w-md">
-                <p className="text-8xl font-black text-gray-100 dark:text-gray-800 select-none mb-2">404</p>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">Link Not Found</h1>
-                <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-8">
-                    The short link you followed doesn&apos;t exist or has been removed.
-                    Double-check the URL or create a new one.
+        <div className="min-h-screen bg-white dark:bg-gray-950 flex items-center justify-center px-4 py-16">
+            <div className="text-center max-w-md mx-auto">
+                <div className="w-16 h-16 rounded-2xl bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-900/60 flex items-center justify-center mx-auto mb-6 text-amber-500">
+                    <FiAlertTriangle className="w-8 h-8" />
+                </div>
+                <p className="text-6xl sm:text-7xl font-black text-gray-200 dark:text-gray-800 tracking-tighter select-none mb-1">
+                    404
+                </p>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-2">
+                    Short Link Not Found
+                </h1>
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-8">
+                    The requested short link does not exist, was removed by the administrator, or the custom slug was misspelled.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <Link
                         href="/"
-                        className="text-sm font-medium px-5 py-2.5 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors bg-white dark:bg-gray-900"
+                        className="inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold px-5 py-2.5 border border-gray-300 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition"
                     >
-                        ← Back Home
+                        <FiHome className="w-4 h-4" />
+                        <span>Back to Home</span>
                     </Link>
                     <Link
                         href="/shorten"
-                        className="text-sm font-medium px-5 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors"
+                        className="inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold px-5 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl shadow-md shadow-violet-600/20 transition"
                     >
-                        Create New Link
+                        <FiPlus className="w-4 h-4" />
+                        <span>Create New Link</span>
                     </Link>
                 </div>
             </div>
